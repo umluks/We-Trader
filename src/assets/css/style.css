@@ -2,11 +2,12 @@
   --color-gray: #f2f2f2;
   --color-white: #ffffff;
   --color-black: #000000;
-  --color-green: #00230d;
-  --color-blue1: #050259;
-  --color-blue2: #a0a4f2;
-  --color-blue3: #bbbdf2;
-  --color-blue4: #3dd973;
+  --color-blue1: #2196f3;
+  --color-blue2: #5a4cf5;
+  --color-blue3: #4c73f5;
+  --color-blue4: #4cdef5;
+  --color-blue5: #914cf5;
+  --color-blue6: #9db2f5;
 }
 
 body {
@@ -66,7 +67,8 @@ main .trader-row {
   margin-top: 8px;
   box-shadow: 0 1px 20px rgba(0, 0, 0, 0.1);
   border-radius: 6px;
-  padding: 10px !important; /* Simplificado */
+  padding: 10px !important;
+  text-align: center;
 }
 
 main .trader-btn {
@@ -82,3 +84,7 @@ main .trader-btn a {
 main .trader-btn a i {
   color: var(--color-white);
 }
+
+/* .modal {
+  max-height: auto !important;
+} */
