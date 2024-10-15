@@ -1,0 +1,84 @@
+:root {
+  --color-gray: #f2f2f2;
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-green: #00230d;
+  --color-blue1: #050259;
+  --color-blue2: #a0a4f2;
+  --color-blue3: #bbbdf2;
+  --color-blue4: #3dd973;
+}
+
+body {
+  /* background-color: var(--color-gray); */
+  font-family: Arial, sans-serif;
+  font-size: 16px; /* Define uma base de font-size */
+}
+
+header {
+  background-color: var(--color-blue1);
+  color: var(--color-white);
+  padding: 10px; /* Simplificado */
+}
+
+header nav {
+  background-color: var(--color-blue1);
+  box-shadow: none;
+}
+
+header nav a {
+  font-size: 2.25rem; /* Em vez de 36px */
+  font-weight: bold;
+  text-transform: uppercase;
+  color: var(--color-white);
+}
+
+header nav li a {
+  font-size: 0.75rem; /* Em vez de 12px */
+  text-transform: none;
+  font-weight: 400;
+  color: var(--color-white);
+}
+
+header nav a:hover {
+  opacity: 0.8; /* Adiciona efeito hover */
+}
+
+main {
+  margin-top: 24px;
+}
+
+main .trader-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  margin-top: 24px;
+  text-align: center;
+}
+
+main .trader-header span {
+  font-weight: bold;
+}
+
+main .trader-row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+  box-shadow: 0 1px 20px rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+  padding: 10px !important; /* Simplificado */
+}
+
+main .trader-btn {
+  display: flex;
+  justify-content: space-evenly;
+  padding: 10px !important; /* Simplificado */
+}
+
+main .trader-btn a {
+  border-radius: 6px;
+}
+
+main .trader-btn a i {
+  color: var(--color-white);
+}
