@@ -96,9 +96,9 @@ document.addEventListener("DOMContentLoaded", function () {
               <div class="col s2">R$ ${parseFloat(ativo.precoAtual).toFixed(
                 2
               )}</div>
-              <div class="col s2">R$ ${(
-                ativo.quantidade * ativo.precoAtual
-              ).toFixed(2)}</div>
+              <div class="col s2">R$ ${(ativo.quantidade * ativo.preco).toFixed(
+                2
+              )}</div>
               <div class="col s1">
                  <button class="btn blue" onclick="editarAtivo(${index})">Editar</button>
               </div>
