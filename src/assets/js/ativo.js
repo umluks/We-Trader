@@ -1,143 +1,144 @@
 document.addEventListener("DOMContentLoaded", function () {
-  var elems = document.querySelectorAll(".modal");
-  var instances = M.Modal.init(elems);
-
-  // Pega os elementos
+  const ativoNomeInput = document.getElementById("ativo-nome");
+  const suggestionsList = document.getElementById("suggestions");
+  const precoAtualInput = document.getElementById("ativo-preco-atual");
   const salvarAtivoBtn = document.getElementById("salvar-ativo");
   const traderContainer = document.getElementById("trader-container");
+  const modalElement = document.querySelector("#modal1");
+  const modalInstance = M.Modal.getInstance(modalElement); // Inicializando o modal
 
-  let editMode = false; // Variável para indicar se está em modo de edição
-  let currentEditRow = null; // Armazena a linha que está sendo editada
+  let ativos = [];
+  let ativoEditando = null; // Para rastrear se estamos editando um ativo
 
-  // Adiciona evento de clique no botão salvar do modal
-  salvarAtivoBtn.addEventListener("click", function () {
-    // Pega os valores dos campos e converte para número
-    const nomeAtivo = document.getElementById("ativo-nome").value;
-    const quantidadeAtivo = parseInt(
-      document.getElementById("ativo-quantidade").value
-    );
-    const precoAtivo = parseFloat(
-      document.getElementById("ativo-preco").value.replace(",", ".")
-    );
-    const precoAtualAtivo = parseFloat(
-      document.getElementById("ativo-preco-atual").value.replace(",", ".")
-    );
+  // Função para adicionar sugestão de ativo e buscar o preço atual
+  ativoNomeInput.addEventListener("input", function () {
+    const query = ativoNomeInput.value;
 
-    // Calcula o saldo
-    const saldoAtivo = precoAtivo * quantidadeAtivo;
+    if (query.length > 2) {
+      fetch(
+        `https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${query}&apikey=89URNZWCG7CZPUBG`
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          suggestionsList.innerHTML = "";
+          data.bestMatches.forEach((stock) => {
+            const listItem = document.createElement("li");
+            listItem.textContent = `${stock["1. symbol"]} - ${stock["2. name"]}`;
+            listItem.addEventListener("click", function () {
+              ativoNomeInput.value = stock["1. symbol"];
+              suggestionsList.innerHTML = "";
 
-    // Formata os valores como moeda BRL
-    const precoAtivoFormatado = precoAtivo.toLocaleString("pt-BR", {
-      style: "currency",
-      currency: "BRL",
-    });
-    const precoAtualAtivoFormatado = precoAtualAtivo.toLocaleString("pt-BR", {
-      style: "currency",
-      currency: "BRL",
-    });
-    const saldoAtivoFormatado = saldoAtivo.toLocaleString("pt-BR", {
-      style: "currency",
-      currency: "BRL",
-    });
-
-    if (editMode && currentEditRow) {
-      // Se estiver em modo de edição, atualiza a linha existente
-      currentEditRow.querySelector(".col.s2:nth-child(1)").textContent =
-        nomeAtivo;
-      currentEditRow.querySelector(".col.s2:nth-child(2)").textContent =
-        quantidadeAtivo;
-      currentEditRow.querySelector(".col.s2:nth-child(3)").textContent =
-        precoAtivoFormatado;
-      currentEditRow.querySelector(".col.s2:nth-child(4)").textContent =
-        precoAtualAtivoFormatado;
-      currentEditRow.querySelector(".col.s2:nth-child(5)").textContent =
-        saldoAtivoFormatado;
-
-      // Reseta o modo de edição
-      editMode = false;
-      currentEditRow = null;
-    } else {
-      // Cria a nova linha com os dados formatados
-      const novaLinha = `
-          <div class="trader-row col s12">
-             <div class="col s2">${nomeAtivo}</div>
-             <div class="col s2">${quantidadeAtivo}</div>
-             <div class="col s2">${precoAtivoFormatado}</div>
-             <div class="col s2">${precoAtualAtivoFormatado}</div>
-             <div class="col s2">${saldoAtivoFormatado}</div>
-             <div class="trader-btn col s2">
-                <a class="waves-effect waves-light btn green edit-ativo"><i class="material-icons">create</i></a>
-                <a class="waves-effect waves-light btn red delete-ativo"><i class="material-icons">delete</i></a>
-             </div>
-          </div>
-       `;
-
-      // Adiciona a nova linha no container
-      traderContainer.innerHTML += novaLinha;
+              // Busca o preço atual
+              fetch(
+                `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${stock["1. symbol"]}&apikey=89URNZWCG7CZPUBG`
+              )
+                .then((response) => response.json())
+                .then((priceData) => {
+                  const price = priceData["Global Quote"]["05. price"];
+                  precoAtualInput.value = parseFloat(price).toFixed(2);
+                });
+            });
+            suggestionsList.appendChild(listItem);
+          });
+        })
+        .catch((error) => {
+          console.error("Erro ao buscar sugestões de ativos:", error);
+        });
     }
-
-    // Fecha o modal
-    const modalInstance = M.Modal.getInstance(
-      document.getElementById("modal1")
-    );
-    modalInstance.close();
-
-    // Limpa os campos do modal
-    document.getElementById("ativo-form").reset();
-
-    // Adiciona o evento de clique para exclusão na nova linha
-    const deleteButtons = traderContainer.querySelectorAll(".delete-ativo");
-    deleteButtons.forEach((button) => {
-      button.addEventListener("click", function () {
-        const confirmDelete = confirm(
-          "Tem certeza que deseja excluir este ativo?"
-        );
-        if (confirmDelete) {
-          const row = button.closest(".trader-row");
-          traderContainer.removeChild(row);
-        }
-      });
-    });
-
-    // Adiciona o evento de clique para edição na nova linha
-    const editButtons = traderContainer.querySelectorAll(".edit-ativo");
-    editButtons.forEach((button) => {
-      button.addEventListener("click", function () {
-        // Habilita o modo de edição
-        editMode = true;
-        currentEditRow = button.closest(".trader-row");
-
-        // Preenche os campos do modal com os dados da linha selecionada
-        document.getElementById("ativo-nome").value =
-          currentEditRow.querySelector(".col.s2:nth-child(1)").textContent;
-        document.getElementById("ativo-quantidade").value =
-          currentEditRow.querySelector(".col.s2:nth-child(2)").textContent;
-
-        // Extrai o preço removendo "R$", "." (separador de milhar) e "," (troca por ".")
-        document.getElementById("ativo-preco").value = currentEditRow
-          .querySelector(".col.s2:nth-child(3)")
-          .textContent.replace("R$", "")
-          .trim()
-          .replace(/\./g, "")
-          .replace(",", ".");
-
-        // Extrai o preço atual removendo "R$", "." (separador de milhar) e "," (troca por ".")
-        document.getElementById("ativo-preco-atual").value = currentEditRow
-          .querySelector(".col.s2:nth-child(4)")
-          .textContent.replace("R$", "")
-          .trim()
-          .replace(/\./g, "")
-          .replace(",", ".");
-
-        // Atualiza os labels para ficarem no lugar correto
-        M.updateTextFields();
-
-        // Abre o modal
-        const modalInstance = M.Modal.getInstance(
-          document.getElementById("modal1")
-        );
-        modalInstance.open();
-      });
-    });
   });
+
+  // Função para salvar o ativo
+  salvarAtivoBtn.addEventListener("click", function () {
+    const nomeAtivo = ativoNomeInput.value;
+    const quantidade = document.getElementById("ativo-quantidade").value;
+    const preco = document.getElementById("ativo-preco").value;
+    const precoAtual = precoAtualInput.value;
+
+    if (nomeAtivo && quantidade && preco && precoAtual) {
+      if (ativoEditando !== null) {
+        // Atualizar ativo existente
+        ativos[ativoEditando] = {
+          nome: nomeAtivo,
+          quantidade: quantidade,
+          preco: preco,
+          precoAtual: precoAtual,
+        };
+      } else {
+        // Adiciona novo ativo
+        const novoAtivo = {
+          nome: nomeAtivo,
+          quantidade: quantidade,
+          preco: preco,
+          precoAtual: precoAtual,
+        };
+        ativos.push(novoAtivo);
+      }
+
+      atualizarListaAtivos();
+      document.getElementById("ativo-form").reset();
+      ativoEditando = null; // Limpa o estado de edição
+
+      modalInstance.close(); // Fecha o modal
+    } else {
+      alert("Por favor, preencha todos os campos antes de salvar.");
+    }
+  });
+
+  // Função para atualizar a exibição dos ativos na UI
+  function atualizarListaAtivos() {
+    const rows = ativos
+      .map((ativo, index) => {
+        return `
+           <div class="col s12 trader-row">
+              <div class="col s2">${ativo.nome}</div>
+              <div class="col s2">${ativo.quantidade}</div>
+              <div class="col s2">R$ ${parseFloat(ativo.preco).toFixed(2)}</div>
+              <div class="col s2">R$ ${parseFloat(ativo.precoAtual).toFixed(
+                2
+              )}</div>
+              <div class="col s2">R$ ${(
+                ativo.quantidade * ativo.precoAtual
+              ).toFixed(2)}</div>
+              <div class="col s1">
+                 <button class="btn blue" onclick="editarAtivo(${index})">Editar</button>
+              </div>
+              <div class="col s1">
+                 <button class="btn red" onclick="removerAtivo(${index})">Remover</button>
+              </div>
+           </div>
+        `;
+      })
+      .join("");
+    traderContainer.innerHTML = `
+        <div class="col s12 trader-header">
+           <div class="col s2"><span>Ativo</span></div>
+           <div class="col s2"><span>Quantidade</span></div>
+           <div class="col s2"><span>Preço em R$</span></div>
+           <div class="col s2"><span>Preço Atual</span></div>
+           <div class="col s2"><span>Saldo</span></div>
+           <div class="col s2"><span> &nbsp; </span></div>
+        </div>
+        ${rows}
+     `;
+  }
+
+  // Função para remover um ativo
+  window.removerAtivo = function (index) {
+    ativos.splice(index, 1);
+    atualizarListaAtivos();
+  };
+
+  // Função para editar um ativo
+  window.editarAtivo = function (index) {
+    const ativo = ativos[index];
+    ativoNomeInput.value = ativo.nome;
+    document.getElementById("ativo-quantidade").value = ativo.quantidade;
+    document.getElementById("ativo-preco").value = ativo.preco;
+    precoAtualInput.value = ativo.precoAtual;
+
+    ativoEditando = index; // Definir o índice para saber que estamos editando
+
+    M.updateTextFields(); // Atualizar os campos de texto no Materialize
+    modalInstance.open(); // Abrir o modal para edição
+  };
 });
