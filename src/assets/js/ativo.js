@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 .then((response) => response.json())
                 .then((priceData) => {
                   const price = priceData["Global Quote"]["05. price"];
-                  precoAtualInput.value = parseFloat(price).toFixed(2);
+                  precoAtualInput.value = parseFloat(price).toFixed(2); // Preenche o campo "Preço Atual"
                 });
             });
             suggestionsList.appendChild(listItem);
