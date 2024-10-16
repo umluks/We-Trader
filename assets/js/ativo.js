@@ -89,7 +89,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const rows = ativos
       .map((ativo, index) => {
         return `
-           <div class="col s12 trader-row">
+           <div class="container trader-row">
               <div class="col s2">${ativo.nome}</div>
               <div class="col s2">${ativo.quantidade}</div>
               <div class="col s2">R$ ${parseFloat(ativo.preco).toFixed(2)}</div>
@@ -99,18 +99,16 @@ document.addEventListener("DOMContentLoaded", function () {
               <div class="col s2">R$ ${(ativo.quantidade * ativo.preco).toFixed(
                 2
               )}</div>
-              <div class="col s1">
-                 <button class="btn blue" onclick="editarAtivo(${index})">Editar</button>
-              </div>
-              <div class="col s1">
-                 <button class="btn red" onclick="removerAtivo(${index})">Remover</button>
+              <div class="col s2">
+                 <button class="btn blue" onclick="editarAtivo(${index})">  <i class="material-icons">edit</i> </button>
+                 <button class="btn red" onclick="removerAtivo(${index})">  <i class="material-icons">delete_forever</i> </button>
               </div>
            </div>
         `;
       })
       .join("");
     traderContainer.innerHTML = `
-        <div class="col s12 trader-header">
+        <div class="container trader-header">
            <div class="col s2"><span>Ativo</span></div>
            <div class="col s2"><span>Quantidade</span></div>
            <div class="col s2"><span>Preço em R$</span></div>

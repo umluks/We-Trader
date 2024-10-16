@@ -23,9 +23,8 @@
             </div>
             <ul class="right hide-on-med-and-down">
                <li>
-                  <a id="add-ativo-btn" class="waves-effect waves-light btn  light-blue darken-4 modal-trigger"
-                     href="#modal1">
-                     <i class="material-icons left">add</i>Adicionar Ativo
+                  <a id="add-ativo-btn" class="waves-effect waves-light btn blue modal-trigger" href="#modal1">
+                     <i class="material-icons left">add</i> Adicionar Ativo
                   </a>
                </li>
             </ul>
@@ -52,7 +51,7 @@
                <label for="ativo-preco">Preço em R$</label>
             </div>
             <div class="input-field">
-               <input type="number" step="0.01" id="ativo-preco-atual" required readonly>
+               <input type="number" step="0.01" id="ativo-preco-atual" required>
                <label for="ativo-preco-atual">Preço Atual</label>
             </div>
          </form>
@@ -63,15 +62,29 @@
       </div>
    </div>
 
-   <main class="trader container row" id="trader-container">
-      <!-- Cabeçalho das operações -->
-      <div class="col s12 trader-header">
-         <div class="col s2"><span>Ativo</span></div>
-         <div class="col s2"><span>Quantidade</span></div>
-         <div class="col s2"><span>Preço em R$</span></div>
-         <div class="col s2"><span>Preço Atual</span></div>
-         <div class="col s2"><span>Saldo</span></div>
-         <div class="col s2"><span> &nbsp; </span></div>
+   <main class="trader" id="trader-container">
+      <div class="container">
+         <!-- Cabeçalho das operações -->
+         <div class="col s12 trader-header">
+            <div class="col s2"><span>Ativo</span></div>
+            <div class="col s2"><span>Quantidade</span></div>
+            <div class="col s2"><span>Preço em R$</span></div>
+            <div class="col s2"><span>Preço Atual</span></div>
+            <div class="col s2"><span>Saldo</span></div>
+            <div class="col s2"><span> &nbsp; </span></div>
+         </div>
+
+         <div class="col s12 trader-row">
+            <div class="col s2">Lucas</div>
+            <div class="col s2">11</div>
+            <div class="col s2">R$ 1.00</div>
+            <div class="col s2">R$ 1.00</div>
+            <div class="col s2">R$ 11.00</div>
+            <div class="col s2">
+               <button class="btn blue" onclick="editarAtivo(0)"> <i class="material-icons">edit</i> </button>
+               <button class="btn red" onclick="removerAtivo(0)"> <i class="material-icons">delete_forever</i> </button>
+            </div>
+         </div>
       </div>
    </main>
 
