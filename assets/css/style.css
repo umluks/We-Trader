@@ -8,18 +8,22 @@
   --color-gray4: #546e7a;
   --color-gray5: #607d8b;
   --color-gray6: #78909c;
+
+  /* Variáveis para margens e padding */
+  --padding-base: 12px;
+  --margin-base: 12px;
 }
 
 body {
   background-color: var(--color-black);
   font-family: Arial, sans-serif;
-  font-size: 16px; /* Define uma base de font-size */
+  font-size: 16px;
 }
 
 header {
   background-color: var(--color-gray1);
   color: var(--color-white);
-  padding: 36px 0 36px 0;
+  padding: 36px 0;
 }
 
 header nav {
@@ -28,35 +32,36 @@ header nav {
 }
 
 header nav a {
-  font-size: 2.25rem; /* Em vez de 36px */
+  font-size: 2.25rem;
   font-weight: bold;
   text-transform: uppercase;
   color: var(--color-white);
+  transition: opacity 0.3s ease; /* Transição suave */
 }
 
 header nav li a {
-  font-size: 0.75rem; /* Em vez de 12px */
+  font-size: 0.75rem;
   text-transform: none;
   font-weight: 400;
   color: var(--color-white);
 }
 
 header nav a:hover {
-  opacity: 0.8; /* Adiciona efeito hover */
+  opacity: 0.8;
 }
 
 main {
   background-color: var(--color-gray1);
   height: calc(100vh - 1px);
+  text-align: center;
 }
 
 main .trader-header {
   display: flex;
   justify-content: space-between;
-  margin-top: 3px;
-  text-align: center;
+  margin-top: 4px;
   color: var(--color-white);
-  padding: 24px 0 0 0;
+  padding: 24px;
 }
 
 main .trader-header span {
@@ -67,18 +72,18 @@ main .trader-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 12px;
+  margin-top: 6px;
   background-color: var(--color-white);
   box-shadow: 0 1px 20px rgba(0, 0, 0, 0.1);
   border-radius: 6px;
-  padding: 12px 12px 12px 12px !important;
+  padding: 12px 12px;
   text-align: center;
 }
 
 main .trader-btn {
   display: flex;
   justify-content: space-evenly;
-  padding: 10px !important; /* Simplificado */
+  padding: var(--padding-base); /* Usando variável */
 }
 
 main .trader-btn a {
