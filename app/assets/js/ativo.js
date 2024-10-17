@@ -137,13 +137,12 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // Função para remover um ativo
-  const cancelarAtivoBtn = document.getElementById("cancelar-ativo");
-  cancelarAtivoBtn.addEventListener("click", function () {
-    // Limpa os campos do formulário
-    document.getElementById("ativo-form").reset();
-    ativoEditando = null; // Limpa o estado de edição
-    modalInstance.close(); // Fecha o modal
-  });
+  window.removerAtivo = function (index) {
+    if (confirm("Tem certeza que deseja remover este ativo?")) {
+      ativos.splice(index, 1); // Remove o ativo da lista pelo índice
+      atualizarListaAtivos(); // Atualiza a lista exibida
+    }
+  };
 
   // Função para editar um ativo
   window.editarAtivo = function (index) {
@@ -164,4 +163,13 @@ document.addEventListener("DOMContentLoaded", function () {
     M.updateTextFields(); // Atualizar os campos de texto no Materialize
     modalInstance.open(); // Abrir o modal para edição
   };
+
+  // Função para cancelar a edição/adição de um ativo
+  const cancelarAtivoBtn = document.getElementById("cancelar-ativo");
+  cancelarAtivoBtn.addEventListener("click", function () {
+    // Limpa os campos do formulário
+    document.getElementById("ativo-form").reset();
+    ativoEditando = null; // Limpa o estado de edição
+    modalInstance.close(); // Fecha o modal
+  });
 });
