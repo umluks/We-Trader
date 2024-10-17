@@ -10,42 +10,58 @@ document.addEventListener("DOMContentLoaded", function () {
   let ativos = [];
   let ativoEditando = null; // Para rastrear se estamos editando um ativo
 
-  // Função para adicionar sugestão de ativo e buscar o preço atual
-  ativoNomeInput.addEventListener("input", function () {
-    const query = ativoNomeInput.value;
+  function debounce(func, delay) {
+    let timeout;
+    return function (...args) {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => func.apply(this, args), delay);
+    };
+  }
 
-    if (query.length > 2) {
-      fetch(
-        `https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${query}&apikey=89URNZWCG7CZPUBG`
-      )
-        .then((response) => response.json())
-        .then((data) => {
-          suggestionsList.innerHTML = "";
-          data.bestMatches.forEach((stock) => {
-            const listItem = document.createElement("li");
-            listItem.textContent = `${stock["1. symbol"]} - ${stock["2. name"]}`;
-            listItem.addEventListener("click", function () {
-              ativoNomeInput.value = stock["1. symbol"];
-              suggestionsList.innerHTML = "";
+  ativoNomeInput.addEventListener(
+    "input",
+    debounce(function () {
+      const query = ativoNomeInput.value;
 
-              // Busca o preço atual
-              fetch(
-                `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${stock["1. symbol"]}&apikey=89URNZWCG7CZPUBG`
-              )
-                .then((response) => response.json())
-                .then((priceData) => {
-                  const price = priceData["Global Quote"]["05. price"];
-                  precoAtualInput.value = parseFloat(price).toFixed(2); // Preenche o campo "Preço Atual"
-                });
+      if (query.length > 2) {
+        fetch(
+          `https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${query}&apikey=89URNZWCG7CZPUBG`
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            suggestionsList.innerHTML = "";
+            data.bestMatches.forEach((stock) => {
+              const listItem = document.createElement("li");
+              listItem.textContent = `${stock["1. symbol"]} - ${stock["2. name"]}`;
+              listItem.addEventListener("click", function () {
+                ativoNomeInput.value = stock["1. symbol"];
+                suggestionsList.innerHTML = "";
+
+                // Busca o preço atual
+                fetch(
+                  `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${stock["1. symbol"]}&apikey=89URNZWCG7CZPUBG`
+                )
+                  .then((response) => response.json())
+                  .then((priceData) => {
+                    const price = priceData["Global Quote"]["05. price"];
+                    precoAtualInput.value = parseFloat(price).toFixed(2); // Preenche o campo "Preço Atual"
+
+                    // Adiciona a classe 'active' ao label
+                    const precoAtualLabel = document.querySelector(
+                      'label[for="ativo-preco-atual"]'
+                    );
+                    precoAtualLabel.classList.add("active");
+                  });
+              });
+              suggestionsList.appendChild(listItem);
             });
-            suggestionsList.appendChild(listItem);
+          })
+          .catch((error) => {
+            console.error("Erro ao buscar sugestões de ativos:", error);
           });
-        })
-        .catch((error) => {
-          console.error("Erro ao buscar sugestões de ativos:", error);
-        });
-    }
-  });
+      }
+    }, 500)
+  ); // 500ms de debounce
 
   // Função para salvar o ativo
   salvarAtivoBtn.addEventListener("click", function () {
@@ -121,10 +137,13 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // Função para remover um ativo
-  window.removerAtivo = function (index) {
-    ativos.splice(index, 1);
-    atualizarListaAtivos();
-  };
+  const cancelarAtivoBtn = document.getElementById("cancelar-ativo");
+  cancelarAtivoBtn.addEventListener("click", function () {
+    // Limpa os campos do formulário
+    document.getElementById("ativo-form").reset();
+    ativoEditando = null; // Limpa o estado de edição
+    modalInstance.close(); // Fecha o modal
+  });
 
   // Função para editar um ativo
   window.editarAtivo = function (index) {
@@ -133,6 +152,12 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("ativo-quantidade").value = ativo.quantidade;
     document.getElementById("ativo-preco").value = ativo.preco;
     precoAtualInput.value = ativo.precoAtual;
+
+    // Adiciona a classe 'active' ao label
+    const precoAtualLabel = document.querySelector(
+      'label[for="ativo-preco-atual"]'
+    );
+    precoAtualLabel.classList.add("active");
 
     ativoEditando = index; // Definir o índice para saber que estamos editando
 

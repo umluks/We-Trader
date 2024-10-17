@@ -11,23 +11,26 @@
    <script src="assets/js/main.js" defer></script>
    <script src="assets/js/ativo.js" defer></script>
 
-   <title>We Trader - Controle total nas suas operações de mercado</title>
+   <title>We Trader - Gerencie Seus Ativos com Total Confiança e Transparência</title>
 </head>
 
 <body>
    <header>
       <nav>
-         <div class="container">
-            <div class="brand-logo">
+         <div class="container header">
+            <div class="logo">
                <a href="index.html">We Trader</a>
+               <small>Gerencie Seus Ativos com Total Confiança e Transparência</small>
             </div>
-            <ul class="right hide-on-med-and-down">
-               <li>
-                  <a id="add-ativo-btn" class="waves-effect waves-light btn blue modal-trigger" href="#modal1">
-                     <i class="material-icons left">add</i> Adicionar Ativo
-                  </a>
-               </li>
-            </ul>
+            <div>
+               <ul class="right hide-on-med-and-down">
+                  <li>
+                     <a id="add-ativo-btn" class="waves-effect waves-light btn blue modal-trigger" href="#modal1">
+                        <i class="material-icons left">add</i> Adicionar Ativo
+                     </a>
+                  </li>
+               </ul>
+            </div>
          </div>
       </nav>
    </header>
@@ -58,7 +61,7 @@
       </div>
       <div class="modal-footer">
          <a href="#!" id="salvar-ativo" class="waves-effect waves-light btn blue">Salvar</a>
-         <a href="#!" class="waves-effect waves-light btn red">Cancelar</a>
+         <a href="#!" id="cancelar-ativo" class="waves-effect waves-light btn red">Cancelar</a>
       </div>
    </div>
 
@@ -71,7 +74,7 @@
             <div class="col s2"><span>Preço em R$</span></div>
             <div class="col s2"><span>Preço Atual</span></div>
             <div class="col s2"><span>Saldo</span></div>
-            <div class="col s2"><span> &nbsp; </span></div>
+            <div class="col s2"><span> Opções </span></div>
          </div>
 
          <div class="col s12 trader-row">
