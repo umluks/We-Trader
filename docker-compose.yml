@@ -2,9 +2,9 @@ version: "3.8"
 
 services:
   web:
-    build: . # O Dockerfile deve estar na raiz do projeto
+    build: ./app # O Dockerfile deve estar na raiz do projeto
     ports:
-      - "8080:80" # Mapeia a porta 80 do contêiner para a porta 8080 do host
+      - "9090:80" # Mapeia a porta 80 do contêiner para a porta 8080 do host
 
   db:
     image: mysql:5.7 # Imagem do MySQL
@@ -25,7 +25,7 @@ services:
       PMA_USER: user # Nome do usuário do banco de dados
       PMA_PASSWORD: userpassword # Senha do usuário
     ports:
-      - "8081:80" # Mapeia a porta 80 do phpMyAdmin para a porta 8081 do host
+      - "9191:80" # Mapeia a porta 80 do phpMyAdmin para a porta 8081 do host
     depends_on:
       - db # Garante que o MySQL esteja em execução antes do phpMyAdmin
 
